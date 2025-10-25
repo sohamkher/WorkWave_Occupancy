@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkWave Occupancy Predictor</title>
+    <link rel="stylesheet" href="static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Alice:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        function updatePrediction(value) {
+            document.getElementById("prediction-container").classList.remove("hidden");
+            const fill = document.getElementById("pred-fill");
+            const text = document.getElementById("pred-value");
+            const pct = Math.min(Math.max(value, 0), 100);
+            fill.style.width = pct + "%";
+            text.innerText = pct.toFixed(2) + "%";
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>💼 WWS Occupancy Predictor</h2>
+
+        <div class="form-wrapper">
+            <form action="/predict" method="get">
+                <div class="form-left">
+                    <label>Select City:</label>
+                    <select name="city">
+                        <option value="Indore">Indore</option>
+                        <option value="Kochi">Kochi</option>
+                        <option value="Chandigarh">Chandigarh</option>
+                        <option value="Jaipur">Jaipur</option>
+                        <option value="Lucknow">Lucknow</option>
+                    </select>
+
+                    <label>Local GDP Growth (%)</label>
+                    <input type="number" step="0.1" name="gdp_growth" required>
+
+                    <label>IT Workforce Population (in thousands)</label>
+                    <input type="number" step="1" name="it_pop" required>
+                </div>
+
+                <div class="form-right">
+                    <label>Competitor Density (per sq km)</label>
+                    <input type="number" step="0.5" name="competitor_density" required>
+
+                    <label>Population Density (people/sq km)</label>
+                    <input type="number" step="1" name="population_density" required>
+
+                    <label>Startup Ecosystem Score (1-10)</label>
+                    <input type="number" step="0.1" name="startup_score" required>
+                </div>
+
+                <input type="submit" value="Predict Occupancy">
+            </form>
+        </div>
+
+        <div id="prediction-container" class="hidden">
+            <p class="pred-title">Predicted Occupancy Rate</p>
+            <div class="pred-bar">
+                <div id="pred-fill"></div>
+            </div>
+            <p id="pred-value"></p>
+        </div>
+
+        <div class="footer">Developed by WorkWave Insights 💙</div>
+    </div>
+</body>
+</html>

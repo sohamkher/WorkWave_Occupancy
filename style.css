@@ -1,0 +1,107 @@
+body {
+    background: #b3dbff;
+    font-family: 'Alice', serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 850px;
+    margin: 40px auto;
+    background: #ffffffdd;
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0px 8px 25px rgba(0,0,0,0.2);
+    position: relative;
+}
+
+h2 {
+    color: #015fc3;
+    text-align: center;
+    font-size: 34px;
+    font-weight: 700;
+}
+
+.form-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.form-left, .form-right {
+    width: 48%;
+}
+
+label {
+    font-weight: bold;
+    color: #003366;
+    margin-top: 8px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #007acc50;
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+input[type=submit] {
+    background: #38b6ff;
+    color: #003366;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: .25s;
+}
+
+input[type=submit]:hover {
+    background: #0190e6;
+}
+
+#prediction-container {
+    margin-top: 35px;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.pred-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #004c91;
+    margin-bottom: 8px;
+}
+
+.pred-bar {
+    width: 100%;
+    background: #d8f1ff;
+    height: 35px;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+#pred-fill {
+    height: 100%;
+    background: linear-gradient(to right, #51c4ff, #007acc);
+    width: 0%;
+    transition: width 1.2s ease;
+    border-radius: 15px;
+}
+
+#pred-value {
+    margin-top: 8px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #003366;
+}
+
+.footer {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 20px;
+}
