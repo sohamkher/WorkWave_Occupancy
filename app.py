@@ -6,7 +6,6 @@ import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 import joblib
-from pyngrok import ngrok
 import os
 
 # ------------------- TRAIN MODEL -------------------
@@ -19,7 +18,7 @@ def train_model():
     joblib.dump(model, "workwave_model.pkl")
     return model
 
-# Load or train the model once
+# Load model or train if not found
 if os.path.exists("workwave_model.pkl"):
     model = joblib.load("workwave_model.pkl")
 else:
@@ -28,17 +27,18 @@ else:
 # ------------------- FASTAPI APP -------------------
 app = FastAPI(title="WorkWave Occupancy Predictor")
 
-# Mount static folder for CSS
+# Serve static files like CSS
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Serve index.html
+
+# Serve HTML homepage
 @app.get("/", response_class=HTMLResponse)
 def home():
     with open("index.html", "r", encoding="utf-8") as f:
-        html_content = f.read()
-    return HTMLResponse(content=html_content)
+        return f.read()
 
-# Prediction endpoint
+
+# Prediction API
 @app.get("/predict", response_class=HTMLResponse)
 def predict(
     city: str = Query(...),
@@ -50,21 +50,15 @@ def predict(
 ):
     input_data = np.array([[gdp_growth, it_pop, competitor_density, population_density, startup_score]])
     prediction = model.predict(input_data)[0]
-    percent = prediction * 3
+    percent = min(max(prediction * 3, 0), 100)
 
-    # Return the same page and auto update the bar through JS
     with open("index.html", "r", encoding="utf-8") as f:
         html = f.read()
 
-    return HTMLResponse(
-        content=html + f"<script>updatePrediction({percent});</script>"
-    )
+    return HTMLResponse(content=html + f"<script>updatePrediction({percent});</script>")
 
-# ------------------- RUN WITH NGROK -------------------
+
+# ------------------- PRODUCTION RUN CONFIG -------------------
 if __name__ == "__main__":
-    ngrok.set_auth_token("34WEvm8lAozqQfF5Hu3NhOMqA2E_2L5gjGFHmfAkqdHP8EeLY")  # Replace with your token
-
-    public_url = ngrok.connect(8000)
-    print(f" * Ngrok URL: {public_url}")
-
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
